@@ -1,14 +1,32 @@
 <template>
-  <header-navigation class="freeze-header" />
-  <router-view />
+  <header-navigation class="freeze-header"
+    :scroll-position="scrollPosition"
+  />
+  <home />
 </template>
 
 <script>
 import HeaderNavigation from './components/layout/HeaderNavigation.vue'
+import Home from './views/Home.vue'
 
 export default {
-  components: { HeaderNavigation },
-  name: 'App'
+  components: { HeaderNavigation, Home },
+  name: 'App',
+  data: () => ({
+    windowSize: window.innerHeight,
+    scrollPosition: 0
+  }),
+  created () {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  unmounted () {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
+  methods: {
+    handleScroll () {
+      this.scrollPosition = window.scrollY
+    }
+  }
 }
 </script>
 
