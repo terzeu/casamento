@@ -12,8 +12,8 @@
       </div>
     </div>
     <div id="location-block" class="block">
-      <h3>Onde vai ser ?</h3>
-      <p>O nosso casamento acontecerá no espaço Flora Flamboyant no dia 23 / 01 / 2021 às 16:30.</p>
+      <h3>localização</h3>
+      <p>O nosso casamento acontecerá no espaço Flamboyant Flora no dia 23 / 01 / 2021 às <span>16:30</span>.</p>
       <div class="mapouter">
         <div class="gmap_canvas">
           <iframe
@@ -30,7 +30,28 @@
       </div>
     </div>
     <div id="inviteds-block" class="block">
-      333333333333333333333333333 sdfasd fsda
+      <h3>Confirme sua presença</h3>
+      <div class="inviteds-list">
+        <div v-for="(invited, index) in convidados" :key="index" class="invited-item" @click="toggleConfirmed(index)">
+          <div class="check">
+            <icon-done v-if="invited.confirmed" />
+            <div v-else class="danger" />
+          </div>
+          <div class="name">
+            {{ invited.nome }}
+          </div>
+        </div>
+      </div>
+      <teleport to="body">
+        <div v-if="modalOpen" class="modal">
+          <div v-if="loading">
+            <img src="../assets/loading2.gif">
+          </div>
+          <div v-else class="card">
+            <p>{{ confirmationMsg }}</p>
+          </div>
+        </div>
+      </teleport>
     </div>
     <div id="gifts-block" class="block">
       <h3>Quer nos presentear ?</h3>
@@ -79,13 +100,58 @@
 
 <script>
 import Countdown from '../components/Countdown'
+import IconDone from '../components/IconDone'
+import { db } from '../firebase'
 
 export default {
-  components: { Countdown },
+  components: { Countdown, IconDone },
   name: 'Home',
+  data () {
+    return {
+      convidados: [],
+      groupCode: null,
+      modalOpen: false,
+      loading: false,
+      messagesOptions: ['Presença confirmada!', 'Presença não confirmada!'],
+      confirmationMsg: 'Presença confirmada!'
+    }
+  },
+  created () {
+    this.getConvidadosFromFamily()
+  },
   computed: {
     isMobile () {
       return window.innerWidth < 700
+    }
+  },
+  methods: {
+    toggleConfirmed (invitedIndex) {
+      this.loading = true
+      this.modalOpen = true
+      const previusConfirmedStatus = this.convidados[invitedIndex].confirmed
+      db.collection('convidados').doc(this.convidados[invitedIndex].id)
+        .update({ confirmed: !previusConfirmedStatus, updatedDate: new Date() })
+        .then(response => {
+          this.confirmationMsg = previusConfirmedStatus ? this.messagesOptions[1] : this.messagesOptions[0]
+          this.convidados[invitedIndex].confirmed = !previusConfirmedStatus
+        })
+        .catch(error => {
+          console.log('error', error)
+        })
+        .finally(x => {
+          this.loading = false
+          setTimeout(() => {
+            this.modalOpen = false
+          }, 1500)
+        })
+    },
+    getConvidadosFromFamily () {
+      this.groupCode = window.location.search ? window.location.search.substr(1) : null
+      db.collection('convidados').where('codigo', '==', this.groupCode).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.convidados.push({ id: doc.id, ...doc.data() })
+        })
+      })
     }
   }
 }
@@ -111,11 +177,10 @@ export default {
     font-size: 18px;
   }
   .block {
-    min-height: 100vh;
     padding: 110px 30px;
   }
   #home-block {
-    width: 100vw;
+    height: 100vh;
     padding: 0;
     background-image: url("../assets/background.jpg");
     display: flex;
@@ -150,6 +215,10 @@ export default {
   #location-block {
     p {
       margin-bottom: 65px;
+      font-size: 20px;
+      span {
+        font-weight: bold;
+      }
     }
     .mapouter {
       display: flex;
@@ -164,6 +233,37 @@ export default {
     }
   }
   #inviteds-block {
+    .inviteds-list {
+      background-color: rgb(175, 138, 108);
+      color: white;
+      max-width: 600px;
+      margin: auto;
+      .invited-item {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        &:not(:last-child) {
+          border-bottom: 1px solid white;
+        }
+        .check {
+          margin-right: 25px;
+          .success {
+            height: 20px;
+            width: 20px;
+            color: white;
+          }
+          .danger {
+            height: 20px;
+            width: 20px;
+            border-radius: 10px;
+            border: 1px solid white;
+          }
+        }
+        .name {
+        }
+      }
+    }
   }
   #gifts-block {
     p {
@@ -202,6 +302,9 @@ export default {
         }
       }
     }
+  }
+  .card {
+    background-color: white;
   }
 }
 </style>

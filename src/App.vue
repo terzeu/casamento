@@ -8,8 +8,6 @@
 <script>
 import HeaderNavigation from './components/layout/HeaderNavigation.vue'
 import Home from './views/Home.vue'
-// import { Base64 } from 'js-base64'
-import { db } from './firebase'
 
 export default {
   components: { HeaderNavigation, Home },
@@ -20,7 +18,6 @@ export default {
   }),
   created () {
     window.addEventListener('scroll', this.handleScroll)
-    this.bancoFirebase()
   },
   unmounted () {
     window.removeEventListener('scroll', this.handleScroll)
@@ -28,26 +25,6 @@ export default {
   methods: {
     handleScroll () {
       this.scrollPosition = window.scrollY
-    },
-    bancoFirebase () {
-      db.collection('convidados').get().then((querySnapshot) => {
-        console.log('total', querySnapshot.size)
-      })
-      // convidados.forEach(convidado => {
-      //   console.log('adicionando:', convidado.nome)
-      //   db.collection('convidados').add({
-      //     codigo: Base64.encode(convidado.familia),
-      //     confirmed: false,
-      //     familia: convidado.familia,
-      //     nome: convidado.nome
-      //   })
-      //     .then((docRef) => {
-      //       console.log('Document written with ID: ', docRef.id)
-      //     })
-      //     .catch((error) => {
-      //       console.error('Error adding document: ', error)
-      //     })
-      // })
     }
   }
 }
@@ -63,6 +40,36 @@ body{
     margin: 0;
     margin-block-start: 0;
     margin-block-end: 0;
+  }
+
+  .modal {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: rgba(0,0,0,.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      padding: 5px;
+      &.card {
+        background-color: white;
+        width: 90%;
+        max-width: 600px;
+        height: 100px;
+        p {
+          color: rgb(175, 138, 108);
+          font-size: 25px;
+          font-weight: bold;
+        }
+      }
+    }
   }
 
   #app {
