@@ -8,6 +8,8 @@
 <script>
 import HeaderNavigation from './components/layout/HeaderNavigation.vue'
 import Home from './views/Home.vue'
+// import { Base64 } from 'js-base64'
+import { db } from './firebase'
 
 export default {
   components: { HeaderNavigation, Home },
@@ -18,6 +20,7 @@ export default {
   }),
   created () {
     window.addEventListener('scroll', this.handleScroll)
+    this.bancoFirebase()
   },
   unmounted () {
     window.removeEventListener('scroll', this.handleScroll)
@@ -25,6 +28,26 @@ export default {
   methods: {
     handleScroll () {
       this.scrollPosition = window.scrollY
+    },
+    bancoFirebase () {
+      db.collection('convidados').get().then((querySnapshot) => {
+        console.log('total', querySnapshot.size)
+      })
+      // convidados.forEach(convidado => {
+      //   console.log('adicionando:', convidado.nome)
+      //   db.collection('convidados').add({
+      //     codigo: Base64.encode(convidado.familia),
+      //     confirmed: false,
+      //     familia: convidado.familia,
+      //     nome: convidado.nome
+      //   })
+      //     .then((docRef) => {
+      //       console.log('Document written with ID: ', docRef.id)
+      //     })
+      //     .catch((error) => {
+      //       console.error('Error adding document: ', error)
+      //     })
+      // })
     }
   }
 }
