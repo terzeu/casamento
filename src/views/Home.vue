@@ -177,7 +177,7 @@ export default {
     font-size: 18px;
   }
   .block {
-    padding: 110px 30px;
+    padding: 110px 30px 0 30px;
   }
   #home-block {
     height: 100vh;
@@ -233,7 +233,7 @@ export default {
     }
   }
   #inviteds-block {
-    min-height: calc(100vh - 220px);
+    min-height: calc(100vh - 100px);
     .inviteds-list {
       background-color: rgb(175, 138, 108);
       color: white;
