@@ -48,14 +48,14 @@ export default {
           scrollEnd: windowHeight * 2
         },
         {
-          name: 'Confirmar presença',
-          scrollStart: windowHeight * 2,
-          scrollEnd: windowHeight * 3
-        },
-        {
           name: 'Presentes',
           scrollStart: windowHeight * 3,
           scrollEnd: windowHeight * 4
+        },
+        {
+          name: 'Confirmar presença',
+          scrollStart: windowHeight * 2,
+          scrollEnd: windowHeight * 3
         }
       ],
       openMenu: false
@@ -70,19 +70,19 @@ export default {
     }
   },
   mounted () {
-    const invitedsHeight = document.getElementById('inviteds-block').clientHeight
-    const giftsHeight = document.getElementById('gifts-block').clientHeight
     const locationHeight = document.getElementById('location-block').clientHeight
-    this.routesSession[1].scrollEnd = this.routesSession[0].scrollEnd + locationHeight - 110
+    const giftsHeight = document.getElementById('gifts-block').clientHeight
+    const invitedsHeight = document.getElementById('inviteds-block').clientHeight
+    this.routesSession[1].scrollEnd = this.routesSession[0].scrollEnd + locationHeight
     this.routesSession[2].scrollStart = this.routesSession[1].scrollEnd
-    this.routesSession[2].scrollEnd = this.routesSession[1].scrollEnd + invitedsHeight - 110
+    this.routesSession[2].scrollEnd = this.routesSession[1].scrollEnd + giftsHeight
     this.routesSession[3].scrollStart = this.routesSession[2].scrollEnd
-    this.routesSession[3].scrollEnd = this.routesSession[2].scrollEnd + giftsHeight - 110
+    this.routesSession[3].scrollEnd = this.routesSession[2].scrollEnd + invitedsHeight
   },
   methods: {
     handlerRouteChange (scroll) {
       this.openMenu = false
-      window.scrollTo(0, scroll + 1)
+      window.scrollTo(0, scroll + (scroll === 0 ? 0 : 120))
     }
   }
 }

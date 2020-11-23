@@ -63,6 +63,7 @@ body{
         width: 90%;
         max-width: 600px;
         height: 100px;
+        text-align: center;
         p {
           color: rgb(175, 138, 108);
           font-size: 25px;

@@ -13,7 +13,7 @@
     </div>
     <div id="location-block" class="block">
       <h3>localização</h3>
-      <p>O nosso casamento acontecerá no espaço Flamboyant Flora no dia 23 / 01 / 2021 às <span>16:30</span>.</p>
+      <p>O nosso casamento acontecerá no espaço Flamboyant Flora no dia 23/01/2021 às <span>16:30</span>.</p>
       <div class="mapouter">
         <div class="gmap_canvas">
           <iframe
@@ -28,30 +28,6 @@
           />
         </div>
       </div>
-    </div>
-    <div id="inviteds-block" class="block">
-      <h3>Confirme sua presença</h3>
-      <div class="inviteds-list">
-        <div v-for="(invited, index) in convidados" :key="index" class="invited-item" @click="toggleConfirmed(index)">
-          <div class="check">
-            <icon-done v-if="invited.confirmed" />
-            <div v-else class="danger" />
-          </div>
-          <div class="name">
-            {{ invited.nome }}
-          </div>
-        </div>
-      </div>
-      <teleport to="body">
-        <div v-if="modalOpen" class="modal">
-          <div v-if="loading">
-            <img src="../assets/loading2.gif">
-          </div>
-          <div v-else class="card">
-            <p>{{ confirmationMsg }}</p>
-          </div>
-        </div>
-      </teleport>
     </div>
     <div id="gifts-block" class="block">
       <h3>Quer nos presentear ?</h3>
@@ -94,6 +70,30 @@
           <p>CPF: 047131031-01</p>
         </div>
       </div>
+    </div>
+    <div id="inviteds-block" class="block">
+      <h3>Confirme sua presença</h3>
+      <div class="inviteds-list">
+        <div v-for="(invited, index) in convidados" :key="index" class="invited-item" @click="toggleConfirmed(index)">
+          <div class="check">
+            <icon-done v-if="invited.confirmed" />
+            <div v-else class="danger" />
+          </div>
+          <div class="name">
+            {{ invited.nome }}
+          </div>
+        </div>
+      </div>
+      <teleport to="body">
+        <div v-if="modalOpen" class="modal">
+          <div v-if="loading">
+            <img src="../assets/loading2.gif">
+          </div>
+          <div v-else class="card">
+            <p>{{ confirmationMsg }}</p>
+          </div>
+        </div>
+      </teleport>
     </div>
   </div>
 </template>
@@ -233,6 +233,7 @@ export default {
     }
   }
   #inviteds-block {
+    min-height: calc(100vh - 220px);
     .inviteds-list {
       background-color: rgb(175, 138, 108);
       color: white;
