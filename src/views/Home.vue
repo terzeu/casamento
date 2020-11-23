@@ -73,6 +73,7 @@
     </div>
     <div id="inviteds-block" class="block">
       <h3>Confirme sua presença</h3>
+      <p class="subtitle">Por favor, confirme até o dia <b>05/01/2021</b></p>
       <div class="inviteds-list">
         <div v-for="(invited, index) in convidados" :key="index" class="invited-item" @click="toggleConfirmed(index)">
           <div class="check">
@@ -234,6 +235,9 @@ export default {
   }
   #inviteds-block {
     min-height: calc(100vh - 100px);
+    .subtitle {
+      margin-bottom: 40px;
+    }
     .inviteds-list {
       background-color: rgb(175, 138, 108);
       color: white;
