@@ -83,7 +83,7 @@
     </div>
     <div id="inviteds-block" class="block">
       <h3>Confirme sua presença</h3>
-      <p class="subtitle">Por favor, confirme até o dia <b>05/01/2021</b></p>
+      <p class="subtitle">Por favor, confirme até o dia <b>05/01/2021</b> clicando no nome abaixo:</p>
       <div class="inviteds-list">
         <div v-for="(invited, index) in convidados" :key="index" class="invited-item" @click="toggleConfirmed(index)">
           <div class="check">
@@ -135,7 +135,6 @@ export default {
       return window.innerWidth < 1248 && window.innerWidth >= 866
     },
     isMobile () {
-      console.log('sssssss', window.innerWidth)
       return window.innerWidth < 866
     }
   },
@@ -164,12 +163,19 @@ export default {
       this.groupCode = window.location.search ? window.location.search.substr(1) : null
       db.collection('convidados').where('codigo', '==', this.groupCode).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+          // console doc ID
+          // console.log(doc.id, doc.data())
           this.convidados.push({ id: doc.id, ...doc.data() })
         })
       })
+      // db.collection('convidados').where('confirmed', '==', true).get().then((querySnapshot) => {
+      //   querySnapshot.forEach((doc) => {
+      //     // console convidados confirmados
+      //     console.log(doc.id, doc.data())
+      //   })
+      // })
     },
     openPagSeguro () {
-      console.log('adasda')
       window.open('https://pag.ae/7WEpNyzzv', '_blank')
     }
   }
@@ -269,6 +275,9 @@ export default {
         &:not(:last-child) {
           border-bottom: 1px solid white;
         }
+        &:hover {
+          background-color: rgb(129, 91, 59);
+        }
         .check {
           margin-right: 25px;
           .success {
@@ -338,7 +347,6 @@ export default {
           margin-bottom: 20px;
         }
         .gitf-content {
-          flex: 1;
           display: flex;
           justify-content: center;
           align-items: center;
