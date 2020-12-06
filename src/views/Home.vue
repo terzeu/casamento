@@ -50,7 +50,7 @@
         o melhor presente que poderíamos ter.
       </p>
       <h5>Para transferências:</h5>
-      <div :class="{ 'account-content': true, mobile: isMobile }">
+      <div :class="{ 'account-content': true, mobile: isMobile, medium: isMedium }">
         <div class="bank-info">
           <div class="bank-icon bb">
             <img src="../assets/bb.png" />
@@ -68,6 +68,16 @@
           <p>Agência: 0001</p>
           <p>Nome: Matheus Araujo Soares Rosa</p>
           <p>CPF: 047131031-01</p>
+        </div>
+        <div class="bank-info">
+          <div class="bank-icon nu">
+            <img src="../assets/pagseguro.png" />
+          </div>
+          <div class="gitf-content">
+            <div class="gift-button" @click="openPagSeguro">
+              Cartão de Crédito
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -121,8 +131,12 @@ export default {
     this.getConvidadosFromFamily()
   },
   computed: {
+    isMedium () {
+      return window.innerWidth < 1248 && window.innerWidth >= 866
+    },
     isMobile () {
-      return window.innerWidth < 700
+      console.log('sssssss', window.innerWidth)
+      return window.innerWidth < 866
     }
   },
   methods: {
@@ -153,6 +167,10 @@ export default {
           this.convidados.push({ id: doc.id, ...doc.data() })
         })
       })
+    },
+    openPagSeguro () {
+      console.log('adasda')
+      window.open('https://pag.ae/7WEpNyzzv', '_blank')
     }
   }
 }
@@ -275,24 +293,38 @@ export default {
       color: rgb(51, 51, 51);
       line-height: 1.7;
       font-size: 18px;
+      margin: auto;
       margin-bottom: 36px;
+      max-width: 1042px;
     }
     .account-content {
       display: flex;
       align-items: stretch;
       justify-content: center;
       flex-wrap: wrap;
+      &.medium {
+        .bank-info {
+          &:not(:first-child) {
+            border-right: none;
+          }
+        }
+      }
       &.mobile {
         .bank-info {
-          &:first-child {
-            border: none;
+          &:not(:last-child) {
+            border-right: none;
           }
         }
       }
       .bank-info {
         width: 345px;
         padding: 0 25px;
-        &:first-child {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 322px;
+        &:not(:last-child) {
           border-right: 1px solid #333333;
         }
         .bank-icon {
@@ -304,6 +336,18 @@ export default {
         }
         p {
           margin-bottom: 20px;
+        }
+        .gitf-content {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .gift-button {
+            color: white;
+            background-color: rgb(175, 138, 108);
+            padding: 28px;
+            cursor: pointer;
+          }
         }
       }
     }
